@@ -1,0 +1,115 @@
+﻿@model QRCodeModel
+@{
+    ViewData["Title"] = "生成二维码";
+}
+
+
+<form asp-action="Index">
+    <div class="row mt-2">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <label>选择要生成二维码的类型</label>
+            <select asp-for="QRCodeType" id="QRCodeType" class="form-control" onchange="onQRCodeTypeChange()">
+                <option value="web">Website</option>
+                <option value="bookmark">Bookmark URL</option>
+                <option value="sms">SMS</option>
+                <option value="email">Email</option>
+                <option value="wifi">WIFI</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="web" class="row mt-2 hide_div">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <label>输入网站URL</label>
+            <input autocomplete="off" type="url" asp-for="WebSiteURL" class="form-control" />
+        </div>
+    </div>
+
+    <div id="bookmark" class="row mt-2 hide_div">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <label>输入书签URL</label>
+            <input type="url" asp-for="BookMarkURL" class="form-control" autocomplete="off" />
+        </div>
+    </div>
+
+    <div id="sms" class="hide_div">
+        <div class="row mt-2">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <label>输入你的电话号码(例如. +86)</label>
+                <input type="text" asp-for="SMSPhoneNumber" class="form-control" autocomplete="off" />
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <label>输入信息内容</label>
+                <textarea asp-for="SMSBody" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div id="email" class="hide_div">
+        <div class="row mt-2">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <label>输入邮件地址</label>
+                <input type="text" asp-for="ReceiverEmailAddress" class="form-control" autocomplete="off" />
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <label>输入邮件主题</label>
+                <input type="text" asp-for="EmailSubject" class="form-control" autocomplete="off" />
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <label>输入邮件信息</label>
+                <textarea asp-for="EmailMessage" class="form-control"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div id="wifi" class="hide_div">
+        <div class="row mt-2">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <label>输入wifi名称</label>
+                <input type="text" asp-for="WIFIName" class="form-control" autocomplete="off" />
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <label>输入wifi密码</label>
+                <input type="text" asp-for="WIFIPassWord" class="form-control" autocomplete="off" />
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-lg-6 col-md-6 col-sm-12">
+            <button type="submit" class="btn btn-primary">生成</button>
+            <button type="reset" class="btn btn-secondary">重置</button>
+        </div>
+    </div>
+
+    @if (Model !=null && !string.IsNullOrEmpty(Model.QRImageURL))
+    {
+        <div class="row mt-2" id="qrCodeImage">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <img height="250" width="250" src="@Model.QRImageURL" />
+            </div>
+        </div>
+    }
+</form>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#QRCodeType").trigger("change");
+        });
+
+        function onQRCodeTypeChange() {
+            let qrcodeType = $("#QRCodeType").val();
+            $(".hide_div").hide();
+            $("#" + qrcodeType).show();
+        }
+    </script>
+}
